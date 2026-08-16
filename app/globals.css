@@ -1,0 +1,457 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 14px;
+    /* Base font size for mobile */
+  }
+
+  @screen sm {
+    html {
+      font-size: 16px;
+    }
+  }
+
+  h1 {
+    @apply text-2xl sm:text-[35px] leading-tight;
+  }
+
+  p {
+    @apply text-base sm:text-[20px] leading-relaxed;
+  }
+}
+
+/* Animation utilities for Ballpitt landing page */
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Remove autofill gradient background on inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0 30px white inset !important;
+}
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: #1f2937 !important;
+}
+
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0 30px white inset !important;
+}
+
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: #1f2937 !important;
+}
+:root {
+  --font-size: 16px;
+  --background: #ffffff;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #030213;
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.0058 264.53);
+  --secondary-foreground: #030213;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: transparent;
+  --input-background: #f3f3f5;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: #030213;
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #171717;
+  }
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: #171717;
+  --card: oklch(0.145 0 0);
+  --card-foreground: #171717;
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: #171717;
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: #171717;
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: #171717;
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: #717182;
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: #171717;
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: #ededed;
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: #171717;
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: #ededed;
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: #171717;
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+  /* --background: #f3f4fb; */
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+@font-face {
+  font-family: CabinetGrotesk;
+  src: url(/assets/fonts/CabinetGrotesk-Extrabold.woff2) format("woff2");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Satoshi;
+  src: url(/assets/fonts/Satoshi-Medium.woff2) format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Satoshi;
+  src: url(/assets/fonts/Satoshi-MediumItalic.woff2) format("woff2");
+  font-weight: 500;
+  font-style: italic;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Satoshi, Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h4 {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    p {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+
+    label {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    button {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    input {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+  }
+}
+
+@layer utilities {
+  /* General scrollbar width */
+  ::-webkit-scrollbar {
+    width: 8px;
+    /* Vertical scrollbar width */
+    height: 8px;
+    /* Horizontal scrollbar height */
+  }
+
+  /* Scrollbar thumb (the draggable part) */
+  ::-webkit-scrollbar-thumb {
+    background-color: #bcbcd1;
+    /* Thumb color */
+    border-radius: 4px;
+    /* Rounded corners */
+  }
+
+  /* Hover effect for scrollbar thumb */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #bcbcd1;
+    /* Slightly darker thumb on hover */
+    cursor: pointer;
+    /* Show pointer cursor */
+  }
+
+  /* Scrollbar track (background area) */
+  ::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    /* Track color */
+    border-radius: 4px;
+    /* Rounded corners for the track */
+  }
+
+  /* Hover effect for scrollbar track */
+  ::-webkit-scrollbar-track:hover {
+    cursor: pointer;
+    /* Optional cursor style on hover */
+  }
+
+  /* Responsive utilities */
+  .text-smaller {
+    font-size: clamp(0.75rem, 2vw, 1rem);
+  }
+
+  .text-adaptive {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+  }
+
+  .bg-clip-text {
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+.translate-x-full {
+  transform: translateX(100%);
+}
+
+.translate-x-0 {
+  transform: translateX(0);
+}
+
+.animated {
+  transition: all 150ms ease-in-out;
+}
+
+.animated-invisible {
+  opacity: 0;
+  transform: scale(0);
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.animated-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+/* Modal content */
+.modal-content {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  z-index: 50;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+/* Modal close button */
+.modal-close-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: #6b7280;
+}
+
+.modal-close-button:hover {
+  color: #374151;
+}
+
+.gradient-background {
+  background-image: linear-gradient(
+    180deg,
+    #efefff 0%,
+    #bdc1ff 50%,
+    #bbabff 100%
+  );
+}
+
+/* Gradient text characters with CSS variables */
+.gradient-char {
+  background-image: linear-gradient(to right, #7968d8, #6858c8) !important;
+  background-size: var(--gradient-width, 100%) 100% !important;
+  background-position: var(--gradient-offset, 0) 0 !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  display: inline-block !important;
+}
+
+/* Gradient text and children inherit gradient */
+.gradient-span .char {
+  background-image: linear-gradient(to right, #7968d8, #6858c8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* GSAP SplitText Character Animation Styles */
+.char {
+  display: inline-block;
+  transform-origin: center bottom;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* CTA Section Animated Blobs */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.menu-item {
+  /* filter: none; */
+  transition: filter 0.2s ease;
+}
+
+.menu-item-active {
+  filter: brightness(0) saturate(100%) invert(24%) sepia(90%) saturate(1419%)
+    hue-rotate(244deg) brightness(89%) contrast(92%);
+  -webkit-filter: brightness(0) saturate(100%) invert(24%) sepia(90%)
+    saturate(1419%) hue-rotate(244deg) brightness(89%) contrast(92%);
+}
+
+html {
+  font-size: var(--font-size);
+}
