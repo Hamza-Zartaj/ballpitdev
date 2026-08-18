@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "set NEXT_PUBLIC_PORTFOLIO_MODE=true&& next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -36,7 +36,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

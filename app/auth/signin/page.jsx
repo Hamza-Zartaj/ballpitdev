@@ -2,10 +2,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { firebaseSignIn } from "../../utils/firebase/firebaseAuth";
 import { useNewNotification } from "@/app/contexts/NewNotificationProvider";
 import { MdRestartAlt } from "react-icons/md";
 import { AiOutlineHome } from "react-icons/ai";
+
+const portfolioMode =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 const SIGNUP_STEPS = [
   {
@@ -135,7 +138,7 @@ const filterNumericInput = (value, stepIndex, mode) => {
 
 export default function AuthPage() {
   const router = useRouter();
-  const { showNotification } = useNewNotification();
+  const { showNotification = () => {} } = useNewNotification() || {};
   const [mode, setMode] = useState(null); // null | 'signup' | 'signin'
   const [currentStep, setCurrentStep] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -401,6 +404,16 @@ export default function AuthPage() {
       { type: "bot", text: "Perfect! Creating your account..." },
     ]);
 
+    if (portfolioMode) {
+      setIsProcessing(false);
+      setMessages((prev) => [
+        ...prev,
+        { type: "bot", text: "Demo account ready! Redirecting..." },
+      ]);
+      setTimeout(() => router.push(callbackUrl), 800);
+      return;
+    }
+
     try {
       const signupResponse = await fetch("/api/auth/signup", {
         method: "POST",
@@ -416,6 +429,7 @@ export default function AuthPage() {
 
       if (signupResponse.ok) {
         // Automatically sign in the user after successful signup
+        const { firebaseSignIn } = await import("../../utils/firebase/firebaseAuth");
         await firebaseSignIn(formData.email, formData.password);
 
         setTimeout(() => {
@@ -503,7 +517,18 @@ export default function AuthPage() {
       { type: "bot", text: "Signing you in..." },
     ]);
 
+    if (portfolioMode) {
+      setIsProcessing(false);
+      setMessages((prev) => [
+        ...prev,
+        { type: "bot", text: "Preview account accepted! Redirecting..." },
+      ]);
+      setTimeout(() => router.push(callbackUrl), 800);
+      return;
+    }
+
     try {
+      const { firebaseSignIn } = await import("../../utils/firebase/firebaseAuth");
       await firebaseSignIn(formData.email, formData.password);
 
       setTimeout(() => {

@@ -1,9 +1,12 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { firebaseSignIn } from "@/app/utils/firebase/firebaseAuth";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdRestartAlt } from "react-icons/md";
+
+const portfolioMode =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 const STEPS = [
   {
@@ -388,6 +391,16 @@ export default function ChatForm() {
         text: "Perfect! Creating your account...",
       },
     ]);
+
+    if (portfolioMode) {
+      setMessages((prev) => [
+        ...prev,
+        { type: "bot", text: "Demo account ready. Welcome to your dashboard!" },
+      ]);
+      setIsSigningUp(false);
+      setTimeout(() => router.push("/dashboard"), 800);
+      return;
+    }
     
     try {
       const signupResponse = await fetch("/api/auth/signup", {
@@ -405,6 +418,7 @@ export default function ChatForm() {
       });
 
       if (signupResponse.ok) {
+        const { firebaseSignIn } = await import("@/app/utils/firebase/firebaseAuth");
         await firebaseSignIn(formData.email, formData.password);
 
         setIsSigningUp(false);

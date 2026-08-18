@@ -1,15 +1,29 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../config/firebase";
-import {
-	onAuthStateChanged,
-	setPersistence,
-	browserLocalPersistence,
-} from "firebase/auth";
 import { Spinner } from "../components/Spinner";
 
 const AuthContext = createContext({});
+const portfolioMode =
+	process.env.NODE_ENV !== "production" &&
+	process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
+
+const portfolioUser = {
+	uid: "portfolio-demo-user",
+	email: "demo@ballpitt.dev",
+	displayName: "Alex Morgan",
+	name: "Alex Morgan",
+	emailVerified: true,
+	isAnonymous: false,
+	photoURL: null,
+	businessUrl: "https://example.com",
+	qualificationCriteria: "Portfolio preview account",
+	phoneNumber: null,
+	smsPhone: null,
+	notificationstate: true,
+	personaSetting: null,
+	providerData: [],
+};
 
 const _AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
@@ -31,7 +45,19 @@ const _AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const initializeAuthState = async () => {
+			if (portfolioMode) {
+				setUser(portfolioUser);
+				setLoading(false);
+				return;
+			}
+
 			try {
+				const { auth } = await import("../config/firebase");
+				const {
+					onAuthStateChanged,
+					setPersistence,
+					browserLocalPersistence,
+				} = await import("firebase/auth");
 				await setPersistence(auth, browserLocalPersistence);
 				const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
 					if (firebaseUser) {

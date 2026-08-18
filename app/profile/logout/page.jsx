@@ -2,8 +2,11 @@
 import * as React from "react";
 import { LogoutButton } from "./LogoutButton";
 import { useRouter } from "next/navigation";
-import { firebaseSignOut } from "@/app/utils/firebase/firebaseAuth";
 import Modal from "@/app/components/Modal";
+
+const portfolioMode =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 export default function LogoutDialog() {
   const router = useRouter();
@@ -11,7 +14,10 @@ export default function LogoutDialog() {
     try {
       sessionStorage.clear();
       localStorage.clear();
-      await firebaseSignOut();
+      if (!portfolioMode) {
+        const { firebaseSignOut } = await import("@/app/utils/firebase/firebaseAuth");
+        await firebaseSignOut();
+      }
       localStorage.clear();
       router.push("/auth/signin");
     } catch (e) {

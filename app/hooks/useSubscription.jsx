@@ -14,8 +14,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/app/contexts/AuthProvider";
-import { doc, onSnapshot, collection, query, where, getDocs } from "firebase/firestore";
-import { firestore } from "@/app/config/firebase";
+
+const portfolioMode =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 export function useSubscription() {
   const { user } = useAuth();
@@ -36,11 +38,22 @@ export function useSubscription() {
       return;
     }
 
+    if (portfolioMode) {
+      setSubscription((prev) => ({
+        ...prev,
+        status: "active",
+        loading: false,
+      }));
+      return;
+    }
+
     let unsubscribe;
 
     // We need the Firestore doc ID first (documents are keyed by auto-ID, not uid)
     (async () => {
       try {
+        const { doc, onSnapshot, collection, query, where, getDocs } = await import("firebase/firestore");
+        const { firestore } = await import("@/app/config/firebase");
         const q = query(
           collection(firestore, "users"),
           where("uid", "==", user.uid)

@@ -8,7 +8,10 @@ import { Spinner } from "../components/Spinner";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { firestore } from "../config/firebase";
+
+const portfolioMode =
+	process.env.NODE_ENV !== "production" &&
+	process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 export default function Dashboard() {
 	const router = useRouter();
@@ -29,6 +32,7 @@ export default function Dashboard() {
 	// Fetch avatar
 	useEffect(() => {
 		if (!user?.uid) return;
+		if (portfolioMode) return;
 		let active = true;
 
 		(async () => {
@@ -64,6 +68,12 @@ export default function Dashboard() {
 		if (!user?.uid) return;
 		try {
 			setDashboardLoading(true);
+			if (portfolioMode) {
+				setTotalChats(128);
+				return;
+			}
+
+			const { firestore } = await import("../config/firebase");
 
 			// 1) Fetch real chats where user is one of the participants
 			const chatCol = collection(firestore, "chats");

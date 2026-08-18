@@ -33,9 +33,9 @@ export default function LandingPage() {
   return (
     <div className="relative">
       <NavBar />
-      <ChatForm />
-      <HeroSection />
       
+      <HeroSection />
+      <ChatForm />
       <AITransitionSection />
       <VideoExplainer />
       <CoreValueSection />

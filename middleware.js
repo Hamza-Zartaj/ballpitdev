@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
-import { adminAuth } from "./app/config/firebase-admin";
 
 export const runtime = "nodejs"; // Use Node.js runtime for middleware since we use firebase-admin
 
 const publicPaths = ["/instantChat", "/auth/signin", "/auth/resetinput"];
+const portfolioMode =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 export async function middleware(req) {
+  if (portfolioMode) {
+    return NextResponse.next();
+  }
+
   // Allow public paths without auth
   if (publicPaths.some(path => req.nextUrl.pathname.startsWith(path))) {
     return NextResponse.next();
@@ -20,6 +26,7 @@ export async function middleware(req) {
   }
 
   try {
+    const { adminAuth } = await import("./app/config/firebase-admin");
     // Verify Firebase token
     await adminAuth.verifyIdToken(token);
     return NextResponse.next();

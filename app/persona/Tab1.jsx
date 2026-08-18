@@ -2,8 +2,10 @@ import { useAuth } from "@/app/contexts/AuthProvider";
 import { useEffect, useState } from "react";
 import AIChatBubble from "./AIChatBubble";
 import Modal from "../components/Modal";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/app/config/firebase";
+
+const portfolioMode =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 const ChipItem = (props) => {
   const { active, children, onClick } = props;
@@ -48,6 +50,14 @@ const Tab1 = () => {
 
   // Load initial config from database
   useEffect(() => {
+    if (portfolioMode) {
+      setPersonaName("Alex's Sales Assistant");
+      setPersonality(CONSTS.PERSONALITY.FRIENDLY);
+      setExtraPrompt("We help growing businesses turn website visitors into qualified leads.");
+      setShareImage(true);
+      return;
+    }
+
     const loadConfig = async () => {
       try {
         const response = await fetch(`/api/users/persona?id=${user.uid}`, {
@@ -85,6 +95,12 @@ const Tab1 = () => {
   }, [user]);
 
   const savePersonaSettings = async (setting) => {
+    if (portfolioMode) {
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+      return;
+    }
+
     try {
       setIsSaving(true);
       setSaveSuccess(false);
@@ -124,6 +140,14 @@ const Tab1 = () => {
 
   const uploadToFirebase = async (file) => {
     try {
+      if (portfolioMode) {
+        return URL.createObjectURL(file);
+      }
+
+      const [{ getDownloadURL, ref, uploadBytes }, { storage }] = await Promise.all([
+        import("firebase/storage"),
+        import("@/app/config/firebase"),
+      ]);
       const storageRef = ref(
         storage,
         `medias/${file.name}-${Math.round(Math.random() * 10000000)}`
@@ -334,7 +358,7 @@ const Tab1 = () => {
             className={`${images.length >= 4
               ? "pointer-events-none opacity-50 cursor-not-allowed"
               : "cursor-pointer"
-              } w-full mt-2 py-3 px-4 rounded-full text-Primary-500 font-medium flex items-end justify-center items-center bg-Primary-800 hover:opacity-90`}
+              } w-full mt-2 py-3 px-4 rounded-full text-Primary-500 font-medium flex justify-center items-center bg-Primary-800 hover:opacity-90`}
             htmlFor="file-input"
           >
             <img src="/assets/svgs/upload.svg" className="mr-2" />

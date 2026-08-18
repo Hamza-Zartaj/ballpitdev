@@ -2,10 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage, firestore } from "../config/firebase";
 import { Spinner } from "../components/Spinner";
-import { doc, setDoc, getDoc } from "firebase/firestore";
 
 export function Content({ userData }) {
 	const router = useRouter();
@@ -67,6 +64,11 @@ export function Content({ userData }) {
 
 		try {
 			setUploading(true);
+				const [{ getDownloadURL, ref, uploadBytes }, { storage, firestore }, { doc, setDoc, getDoc }] = await Promise.all([
+					import("firebase/storage"),
+					import("../config/firebase"),
+					import("firebase/firestore"),
+				]);
 			const fileName = `${userData.uid}_main_avatar`;
 			const storageRef = ref(storage, `profileimages/${fileName}`);
 

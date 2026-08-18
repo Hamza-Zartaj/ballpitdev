@@ -5,8 +5,19 @@
 
 import { Resend } from 'resend';
 
-// Initialize Resend with API key from environment
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resendClient;
+
+const getResendClient = () => {
+  if (!resendClient) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is required for email operations");
+    }
+
+    resendClient = new Resend(process.env.RESEND_API_KEY);
+  }
+
+  return resendClient;
+};
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'hello@ballpitt.com';
 
@@ -22,7 +33,7 @@ export async function sendVerificationCode(email, code) {
       return { success: false, error: 'Email and code are required' };
     }
 
-    const result = await resend.emails.send({
+    const result = await getResendClient().emails.send({
       from: FROM_EMAIL,
       to: email,
       subject: 'Verify Your BallPitt Account',
@@ -93,7 +104,7 @@ export async function sendPasswordResetCode(email, code) {
       return { success: false, error: 'Email and code are required' };
     }
 
-    const result = await resend.emails.send({
+    const result = await getResendClient().emails.send({
       from: FROM_EMAIL,
       to: email,
       subject: 'Reset Your BallPitt Password',
@@ -181,7 +192,7 @@ export async function sendTranscriptEmail(email, transcriptData) {
       `)
       .join('');
 
-    const result = await resend.emails.send({
+    const result = await getResendClient().emails.send({
       from: FROM_EMAIL,
       to: email,
       subject: `Chat Transcript - ${visitorName || 'Demo Chat'} (ID: ${chatId?.slice(-8) || 'N/A'})`,
@@ -275,7 +286,7 @@ export async function sendTranscriptEmail(email, transcriptData) {
  */
 export async function testResendConnection(testEmail) {
   try {
-    const result = await resend.emails.send({
+    const result = await getResendClient().emails.send({
       from: FROM_EMAIL,
       to: testEmail,
       subject: 'Test Email - BallPitt Email Service',

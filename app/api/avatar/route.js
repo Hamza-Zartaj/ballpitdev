@@ -1,12 +1,25 @@
-import userController from "@/app/controllers/userController";
-import { doc, getDoc, updateDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { firestore } from "@/app/config/firebase";
+const portfolioMode =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 export const GET = async (req) => {
   try {
     const url = new URL(req.url);
     const id = url.searchParams.get("id"); // e.g. "guest-19815" or "realUserId"
     const isAll = url.searchParams.get("all"); // optional, e.g. "?all=1"
+
+    if (portfolioMode) {
+      const avatar = "/assets/images/temp.jfif";
+      return new Response(
+        JSON.stringify(
+          isAll === "1" ? { avatars: [avatar], main: 0 } : { avatar }
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const { doc, getDoc, collection, getDocs, query, where } = await import("firebase/firestore");
+    const { firestore } = await import("@/app/config/firebase");
 
     // If the ID starts with "guest-", fetch from demochats collection
     if (id && id.startsWith("guest-")) {
@@ -140,6 +153,16 @@ export const PUT = async (req) => {
     const id = url.searchParams.get("id"); // e.g. "guest-19815" or "realUserId"
     const body = await req.json();
     const { main } = body;
+
+    if (portfolioMode) {
+      return new Response(JSON.stringify({ message: "Preview avatar updated" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const { doc, getDoc, updateDoc } = await import("firebase/firestore");
+    const { firestore } = await import("@/app/config/firebase");
 
     if (!id) {
       return new Response(

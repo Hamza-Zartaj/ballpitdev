@@ -1,12 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import ClientLayout from "../clientlayout";
-import { AuthProvider } from "../contexts/AuthProvider";
-import { ChatProvider } from "../contexts/ChatProvider";
-import { NewNotificationProvider } from "../contexts/NewNotificationProvider";
-import { NotificationProvider } from "../contexts/NotificationProvider";
-import NotificationLayout from "../noticationlayout";
+import dynamic from "next/dynamic";
+
+const ClientLayout = dynamic(() => import("../clientlayout"), { ssr: false });
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();

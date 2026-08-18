@@ -18,8 +18,10 @@ import {
 	limitToLast as rtdbLimit,
 } from "firebase/database";
 import { useEffect, useState } from "react";
-import { firestore, database } from "@/app/config/firebase";
-import { getById } from "../utils/firebase/firestore"; // helper to load demoChats metadata
+
+const portfolioMode =
+	process.env.NODE_ENV !== "production" &&
+	process.env.NEXT_PUBLIC_PORTFOLIO_MODE === "true";
 
 // helper to fetch last message + status from a generic path
 async function getLastMessageAndStatus(path) {
@@ -85,7 +87,42 @@ export default function useChatList(userId, currentUser) {
 	useEffect(() => {
 		if (!userId || !currentUser) return;
 
+		if (portfolioMode) {
+			setChats([
+				{
+					id: "portfolio-chat-1",
+					name: "Sarah Mitchell",
+					avatar: "/fallback.png",
+					status: "online",
+					lastMessage: "Thanks, that sounds perfect.",
+					timestamp: new Date().toISOString(),
+					unreadCount: 2,
+					isAI: false,
+					isDemo: false,
+				},
+				{
+					id: "portfolio-chat-2",
+					name: "Michael Chen",
+					avatar: "/fallback.png",
+					status: "offline",
+					lastMessage: "I would like to learn more about pricing.",
+					timestamp: new Date(Date.now() - 86400000).toISOString(),
+					unreadCount: 0,
+					isAI: true,
+					isDemo: true,
+				},
+			]);
+			setLoading(false);
+			return;
+		}
+
 		setLoading(true);
+
+		let firestore;
+		let database;
+		let unsubscribe;
+		const initializeFirebase = async () => {
+			({ firestore, database } = await import("@/app/config/firebase"));
 
 		// 1) Listen to real user chats
 		const chatCol = collection(firestore, "chats");
@@ -94,7 +131,7 @@ export default function useChatList(userId, currentUser) {
 			where("users", "array-contains", userId)
 		);
 
-		const unsub = onSnapshot(realChatsQuery, async (snapshot) => {
+		unsubscribe = onSnapshot(realChatsQuery, async (snapshot) => {
 			try {
 				// map each chat doc → chat object
 				const realChats = await Promise.all(
@@ -188,7 +225,11 @@ export default function useChatList(userId, currentUser) {
 			}
 		});
 
-		return () => unsub();
+		};
+
+		initializeFirebase();
+
+		return () => unsubscribe?.();
 	}, [userId, currentUser]);
 
 	return { chats, loading, stories };

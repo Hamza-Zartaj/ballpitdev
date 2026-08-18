@@ -16,6 +16,17 @@ bun dev
 
 Open [http://localhost:8033](http://localhost:8033) with your browser to see the result.
 
+### Portfolio Preview
+
+`npm run dev` starts the app in local portfolio preview mode automatically. The preview uses mock data and does not require Firebase or production API credentials.
+
+Open [http://localhost:3000](http://localhost:3000) and use these demo credentials:
+
+- Email: `demo@ballpitt.dev`
+- Password: `Demo123!` (any non-empty password is accepted in preview mode)
+
+This mode is development-only and is disabled in production builds.
+
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

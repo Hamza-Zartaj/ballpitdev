@@ -13,7 +13,7 @@ const PersonaPage = () => {
   const [activeTab, setActiveTab] = useState("tab1");
   const { loading, user } = useAuth();
   const router = useRouter();
-  const { showNotification } = useNewNotification();
+  const { showNotification = () => {} } = useNewNotification() || {};
   const { isActive: hasActiveSubscription, loading: subLoading } = useSubscription();
 
   useEffect(() => {

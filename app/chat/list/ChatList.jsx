@@ -3,9 +3,6 @@ import MenuBar from "@/app/components/MenuBar";
 import moment from "moment";
 import Header from "@/app/components/Header";
 import { useRouter } from "next/navigation";
-import { useChat } from "@/app/contexts/ChatProvider";
-import { Spinner } from "@/app/components/Spinner";
-import { useEffect, useState } from "react";
 
 const ChatListItem = ({
   name,
@@ -55,9 +52,6 @@ const ChatListItem = ({
 
 const ChatList = ({ chatList, stories }) => {
   const router = useRouter();
-  
-
-  const { setUrl, setRecipientName } = useChat();
   return (
     <div className="flex flex-col h-dvh bg-white">
       <Header text="Chat" />
@@ -68,8 +62,6 @@ const ChatList = ({ chatList, stories }) => {
             <ChatListItem
               key={item.id}
               onClick={() => {
-                setRecipientName(item.name);
-                setUrl(item.id);
                 router.push(`/chat/${item.id}`);
               }}
               name={item.name}
